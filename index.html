@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Burger Demo 2 – Smash Burgers Artesanales</title>
+  <meta name="description" content="Las mejores smash burgers artesanales de España. Ingredientes naturales, recetas propias. Demo Burger — web demo para hamburgueserías." />
+  <meta property="og:title" content="Demo Burger – Smash Burgers Artesanales" />
+  <meta property="og:description" content="Las mejores smash burgers artesanales de Málaga. Ingredientes naturales, recetas propias." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200&q=80" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --fire: #F97316;
+      --fire-dark: #EA580C;
+      --gold: #F59E0B;
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --text: #f1f1f1;
+      --text-muted: #a0a0a0;
+      --glass: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.10);
+      --radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--fire); border-radius: 3px; }
+
+    /* ── UTILITY ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--fire) 0%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 60px;
+      color: var(--fire);
+      font-size: 1.2rem;
+    }
+    .section-line::before, .section-line::after {
+      content: '';
+      height: 1px;
+      width: 80px;
+      background: linear-gradient(to right, transparent, var(--fire));
+    }
+    .section-line::after { background: linear-gradient(to left, transparent, var(--fire)); }
+
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-decoration: none;
+    }
+    .btn-fire {
+      background: linear-gradient(135deg, var(--fire) 0%, var(--fire-dark) 100%);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(249,115,22,0.4);
+    }
+    .btn-fire:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 8px 32px rgba(249,115,22,0.6);
+    }
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.6);
+    }
+    .btn-outline:hover {
+      border-color: var(--fire);
+      color: var(--fire);
+      transform: scale(1.06) translateY(-2px);
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── NAVBAR ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 16px 0;
+      transition: all 0.4s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 10px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-logo span { color: var(--fire); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--fire);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta { margin-left: 16px; padding: 10px 24px; font-size: 0.85rem; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0; right: -100%;
+      width: min(320px, 85vw);
+      height: 100vh;
+      background: rgba(15,15,15,0.98);
+      backdrop-filter: blur(20px);
+      z-index: 999;
+      padding: 80px 32px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      border-left: 1px solid var(--glass-border);
+      transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .mobile-drawer.open { right: 0; }
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .drawer-overlay.open { opacity: 1; pointer-events: all; }
+    .mobile-drawer a {
+      color: var(--text);
+      text-decoration: none;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 16px;
+      transition: color 0.2s;
+    }
+    .mobile-drawer a:hover { color: var(--fire); }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── HERO ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: -20%;
+      background-image: url('./assets/hero-burger-i_QN7_D_.jpg'),
+                        url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1920&q=90');
+      background-size: cover;
+      background-position: center;
+      will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.75) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 800px;
+      padding: 0 24px;
+      animation: heroEnter 1s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes heroEnter {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(249,115,22,0.15);
+      border: 1px solid rgba(249,115,22,0.4);
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 28px;
+      letter-spacing: 0.5px;
+      animation: heroEnter 1s 0.1s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero-h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      line-height: 0.95;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #fff 0%, var(--fire) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: heroEnter 1s 0.2s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 16px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      animation: heroEnter 1s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero-address {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      animation: heroEnter 1s 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: heroEnter 1s 0.45s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero-scroll-arrow {
+      position: absolute;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: bounceDown 2s infinite;
+    }
+    .hero-scroll-arrow svg { width: 24px; height: 24px; }
+    @keyframes bounceDown {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+      50%       { transform: translateX(-50%) translateY(8px); opacity: 1; }
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── STATS ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #stats {
+      background: linear-gradient(135deg, #1a0a00 0%, #2d1200 50%, #1a0a00 100%);
+      border-top: 1px solid rgba(249,115,22,0.2);
+      border-bottom: 1px solid rgba(249,115,22,0.2);
+      padding: 60px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+    }
+    .stat-item { text-align: center; padding: 20px; }
+    .stat-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+    .stat-num {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--fire);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── CARTA ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #carta { padding: 100px 0; }
+    .filter-tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 10px 24px;
+      border-radius: 50px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      backdrop-filter: blur(8px);
+    }
+    .filter-btn:hover { color: var(--text); border-color: var(--fire); }
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--fire) 0%, var(--fire-dark) 100%);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(249,115,22,0.35);
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .menu-card {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--bg2);
+      border: 1px solid var(--glass-border);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .menu-card:hover {
+      border-color: rgba(249,115,22,0.4);
+      box-shadow: 0 8px 40px rgba(249,115,22,0.15);
+      transform: translateY(-4px);
+    }
+    .menu-img-wrap {
+      position: relative;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .menu-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .menu-card:hover .menu-img-wrap img { transform: scale(1.07); }
+    .menu-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .menu-card:hover .menu-img-overlay { opacity: 1; }
+    .menu-price-big {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--fire);
+    }
+    .menu-badge {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: linear-gradient(135deg, var(--fire), var(--fire-dark));
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      letter-spacing: 0.5px;
+    }
+    .menu-body { padding: 20px; }
+    .menu-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .menu-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .menu-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .menu-price {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--fire);
+    }
+    .add-btn {
+      background: linear-gradient(135deg, var(--fire), var(--fire-dark));
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .add-btn:hover { transform: scale(1.08); box-shadow: 0 4px 16px rgba(249,115,22,0.4); }
+    .add-btn:active { transform: scale(0.96); }
+
+    /* ── TOAST ── */
+    .toast-container {
+      position: fixed;
+      bottom: 90px; right: 24px;
+      z-index: 9000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast {
+      background: var(--bg3);
+      border: 1px solid var(--glass-border);
+      border-left: 4px solid var(--fire);
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      backdrop-filter: blur(12px);
+      animation: toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+      max-width: 300px;
+    }
+    .toast.out { animation: toastOut 0.3s ease forwards; }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(40px) scale(0.9); }
+      to   { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(40px); }
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── GALLERY ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #galeria { padding: 100px 0; background: var(--bg2); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      cursor: pointer;
+    }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.08); }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay svg { width: 40px; height: 40px; color: #fff; }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9500;
+      background: rgba(0,0,0,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 12px;
+      object-fit: contain;
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .lightbox.open .lightbox-img { transform: scale(1); }
+    .lb-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      color: #fff;
+      border-radius: 50%;
+      width: 48px; height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lb-btn:hover { background: var(--fire); border-color: var(--fire); }
+    .lb-prev { left: 20px; }
+    .lb-next { right: 20px; }
+    .lb-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      color: #fff;
+      border-radius: 50%;
+      width: 44px; height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.3rem;
+      transition: all 0.2s;
+    }
+    .lb-close:hover { background: #ef4444; border-color: #ef4444; }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── NOSOTROS ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #nosotros { padding: 100px 0; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .about-img-wrap { position: relative; }
+    .about-img-wrap img { width: 100%; border-radius: 20px; display: block; }
+    .about-img-deco {
+      position: absolute;
+      bottom: -12px; right: -12px;
+      width: 60%; height: 60%;
+      border: 3px solid var(--fire);
+      border-radius: 20px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .about-text .section-title { text-align: left; }
+    .about-text .section-line { justify-content: flex-start; margin-bottom: 24px; }
+    .about-text .section-line::before { display: none; }
+    .about-p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .about-icons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .about-icon-item {
+      text-align: center;
+      padding: 20px 10px;
+      border-radius: 12px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+    }
+    .about-icon-item .icon { font-size: 2rem; display: block; margin-bottom: 10px; }
+    .about-icon-item p { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; line-height: 1.3; }
+
+    /* Scroll animations */
+    .anim-left  { opacity: 0; transform: translateX(-50px); transition: all 0.8s cubic-bezier(0.22,1,0.36,1); }
+    .anim-right { opacity: 0; transform: translateX(50px);  transition: all 0.8s cubic-bezier(0.22,1,0.36,1); }
+    .anim-up    { opacity: 0; transform: translateY(40px);  transition: all 0.7s cubic-bezier(0.22,1,0.36,1); }
+    .anim-left.visible, .anim-right.visible, .anim-up.visible { opacity: 1; transform: none; }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── RESERVAR ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #reservar { padding: 100px 0; background: var(--bg2); }
+    .reservar-wrap { max-width: 720px; margin: 0 auto; }
+    .form-card { padding: 48px; }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .form-group { margin-bottom: 24px; }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--fire); background: rgba(249,115,22,0.05); }
+    .form-input::placeholder { color: var(--text-muted); }
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); cursor: pointer; }
+
+    .chips-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+    .chip {
+      padding: 8px 16px;
+      border-radius: 50px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .chip:hover { border-color: var(--fire); color: var(--text); }
+    .chip.selected {
+      background: linear-gradient(135deg, var(--fire), var(--fire-dark));
+      border-color: transparent;
+      color: #fff;
+    }
+    .persons-chips .chip { min-width: 44px; text-align: center; }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+    .checkbox-wrap input { display: none; }
+    .custom-check {
+      width: 20px; height: 20px;
+      border: 2px solid var(--glass-border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .checkbox-wrap:has(input:checked) .custom-check { background: var(--fire); border-color: var(--fire); }
+    .custom-check svg { width: 12px; height: 12px; color: #fff; display: none; }
+    .checkbox-wrap:has(input:checked) .custom-check svg { display: block; }
+    .checkbox-wrap span { font-size: 0.9rem; color: var(--text-muted); }
+
+    .extra-textarea { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .extra-textarea.visible { max-height: 200px; }
+
+    .wa-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px;
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .wa-btn.active { opacity: 1; pointer-events: all; box-shadow: 0 4px 24px rgba(37,211,102,0.35); }
+    .wa-btn.active:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(37,211,102,0.5); }
+
+    .reservar-note {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .reservar-note strong { color: var(--text); }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── REVIEWS ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #opiniones { padding: 100px 0; }
+    .reviews-global { text-align: center; margin-bottom: 52px; }
+    .reviews-global .stars { font-size: 1.8rem; color: var(--gold); letter-spacing: 4px; margin-bottom: 8px; }
+    .reviews-global p { color: var(--text-muted); font-size: 0.95rem; }
+    .reviews-global span { color: var(--gold); font-weight: 700; font-size: 1.1rem; }
+
+    .carousel-outer { position: relative; overflow: hidden; }
+    .carousel-track { display: flex; transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); }
+    /* Desktop: each page is a 2x2 grid */
+    .review-page { flex: 0 0 100%; padding: 0 8px; }
+    .review-page-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .review-card { }
+    /* Mobile: pages dissolve, cards become individual slides */
+    @media (max-width: 700px) {
+      .review-page { display: contents; }
+      .review-page-grid { display: contents; }
+      .review-card { flex: 0 0 100%; padding: 0 8px; }
+    }
+    .review-inner {
+      padding: 36px;
+      border-radius: 16px;
+      background: var(--bg2);
+      border: 1px solid var(--glass-border);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .review-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .review-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .review-meta h4 { font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+    .review-stars { color: var(--gold); font-size: 0.9rem; letter-spacing: 2px; }
+    .review-date { font-size: 0.8rem; color: var(--text-muted); }
+    .review-text { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; font-style: italic; }
+    .review-text::before { content: '\201C'; font-size: 1.5rem; color: var(--fire); font-style: normal; margin-right: 4px; line-height: 0; vertical-align: -6px; }
+    .review-text::after  { content: '\201D'; font-size: 1.5rem; color: var(--fire); font-style: normal; margin-left: 4px;  line-height: 0; vertical-align: -6px; }
+
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .carousel-arrow {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .carousel-arrow:hover { background: var(--fire); border-color: var(--fire); }
+    .carousel-dots { display: flex; gap: 8px; }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--glass-border);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .dot.active { background: var(--fire); width: 24px; border-radius: 4px; }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── FOOTER ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #contacto {
+      background: #050505;
+      border-top: 1px solid var(--glass-border);
+      padding: 64px 0 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand .nav-logo { font-size: 1.5rem; margin-bottom: 16px; display: inline-flex; }
+    .footer-brand p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; max-width: 280px; margin-bottom: 24px; }
+    .social-links { display: flex; gap: 12px; }
+    .social-link {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+    .social-link:hover { background: var(--fire); border-color: var(--fire); color: #fff; }
+    .footer-col h4 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
+    .footer-col ul li a { color: inherit; text-decoration: none; transition: color 0.2s; }
+    .footer-col ul li a:hover { color: var(--fire); }
+
+    .open-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .open-badge.open-now  { background: rgba(34,197,94,0.15);  color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+    .open-badge.closed-now { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+    .open-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    .footer-bottom {
+      border-top: 1px solid var(--glass-border);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: #444;
+    }
+    .footer-bottom span { color: var(--fire); }
+
+    /* ── FLOATING WA ── */
+    .wa-float {
+      position: fixed;
+      bottom: 28px; left: 24px;
+      z-index: 900;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+      animation: waPulse 2.5s infinite;
+      transition: transform 0.2s;
+    }
+    .wa-float:hover { transform: scale(1.12); }
+    .wa-float svg { width: 28px; height: 28px; }
+    @keyframes waPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.5); }
+      50%       { box-shadow: 0 4px 32px rgba(37,211,102,0.85), 0 0 0 12px rgba(37,211,102,0.1); }
+    }
+    .wa-tooltip {
+      position: absolute;
+      left: 68px; bottom: 50%;
+      transform: translateY(50%);
+      background: var(--bg3);
+      border: 1px solid var(--glass-border);
+      color: var(--text);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .wa-float:hover .wa-tooltip { opacity: 1; }
+    .wa-tooltip::before {
+      content: '';
+      position: absolute;
+      right: 100%; top: 50%;
+      transform: translateY(-50%);
+      border: 6px solid transparent;
+      border-right-color: var(--glass-border);
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── RESPONSIVE ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-text .section-title { text-align: center; }
+      .about-text .section-line { justify-content: center; }
+      .about-text .section-line::before { display: block; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 700px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-icons { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-card { padding: 28px 20px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .lb-prev { left: 8px; }
+      .lb-next { right: 8px; }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    /* ── PRODUCT MODAL ── */
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    .product-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9800;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    @media (min-width: 600px) {
+      .product-modal-overlay { align-items: center; }
+    }
+    .product-modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .product-modal {
+      background: var(--bg2);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 520px;
+      max-height: 92vh;
+      overflow-y: auto;
+      transform: translateY(60px);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+      scrollbar-width: thin;
+      scrollbar-color: var(--fire) transparent;
+    }
+    @media (min-width: 600px) {
+      .product-modal {
+        border-radius: 24px;
+        transform: scale(0.88) translateY(20px);
+      }
+    }
+    .product-modal-overlay.open .product-modal { transform: translateY(0); }
+    @media (min-width: 600px) {
+      .product-modal-overlay.open .product-modal { transform: scale(1) translateY(0); }
+    }
+
+    .pm-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 24px 24px 0 0;
+      display: block;
+    }
+    .pm-badge-wrap {
+      position: absolute;
+      top: 14px; left: 14px;
+    }
+    .pm-close {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      line-height: 1;
+    }
+    .pm-close:hover { background: #ef4444; border-color: #ef4444; }
+
+    .pm-body { padding: 24px 24px 28px; }
+    .pm-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; gap: 12px; }
+    .pm-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+    .pm-price {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--fire);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .pm-short-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      font-style: italic;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .pm-section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--fire);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pm-ingredients {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .pm-ingredient {
+      padding: 5px 13px;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+    .pm-allergens {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 24px;
+    }
+    .pm-allergen-tag {
+      padding: 3px 11px;
+      border-radius: 50px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.25);
+      color: #ef4444;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .pm-confirm-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--fire), var(--fire-dark));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(249,115,22,0.35);
+    }
+    .pm-confirm-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(249,115,22,0.55); }
+    .pm-confirm-btn:active { transform: scale(0.98); }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  NAVBAR                                        -->
+<!-- ══════════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="container nav-inner">
+    <a href="#hero" class="nav-logo">🍔 <span>Demo</span> Burger</a>
+    <ul class="nav-links">
+      <li><a href="#hero">Inicio</a></li>
+      <li><a href="#carta">Carta</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#reservar">Reservar</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <a href="#reservar" class="btn btn-fire nav-cta">Reservar Mesa</a>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<nav class="mobile-drawer" id="mobileDrawer">
+  <a href="#hero"     class="drawer-link">Inicio</a>
+  <a href="#carta"    class="drawer-link">Carta</a>
+  <a href="#galeria"  class="drawer-link">Galería</a>
+  <a href="#nosotros" class="drawer-link">Nosotros</a>
+  <a href="#reservar" class="drawer-link">Reservar</a>
+  <a href="#contacto" class="drawer-link">Contacto</a>
+</nav>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  HERO                                          -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">⭐ 4.8 · +500 reseñas en Google</div>
+    <h1 class="hero-h1">SMASH<br>BURGERS</h1>
+    <p class="hero-sub">Ingredientes naturales · Recetas artesanales · Málaga</p>
+    <p class="hero-address">📍 Calle Larios 7, Local 2 · Málaga</p>
+    <div class="hero-btns">
+      <a href="#reservar" class="btn btn-fire"   style="font-size:1.05rem;padding:16px 40px">RESERVAR MESA</a>
+      <a href="#carta"    class="btn btn-outline" style="font-size:1.05rem;padding:16px 40px">VER LA CARTA</a>
+    </div>
+  </div>
+  <div class="hero-scroll-arrow">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  STATS                                         -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item anim-up">
+        <span class="stat-icon">🍔</span>
+        <div class="stat-num" data-target="8500" data-suffix="+">0</div>
+        <div class="stat-label">Burgers servidas</div>
+      </div>
+      <div class="stat-item anim-up" style="transition-delay:0.1s">
+        <span class="stat-icon">⭐</span>
+        <div class="stat-num" data-target="4.8" data-decimal="1">0</div>
+        <div class="stat-label">Valoración Google</div>
+      </div>
+      <div class="stat-item anim-up" style="transition-delay:0.2s">
+        <span class="stat-icon">📅</span>
+        <div class="stat-num" data-target="5" data-suffix="">0</div>
+        <div class="stat-label">Años de experiencia</div>
+      </div>
+      <div class="stat-item anim-up" style="transition-delay:0.3s">
+        <span class="stat-icon">😊</span>
+        <div class="stat-num" data-target="500" data-suffix="+">0</div>
+        <div class="stat-label">Clientes satisfechos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  CARTA                                         -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="carta">
+  <div class="container">
+    <h2 class="section-title gradient-text anim-up">Nuestra Carta</h2>
+    <div class="section-line anim-up" style="transition-delay:0.1s">🔥🔥🔥</div>
+
+    <div class="filter-tabs">
+      <button class="filter-btn active" data-filter="all">Todas</button>
+      <button class="filter-btn" data-filter="burger">🍔 Burgers</button>
+      <button class="filter-btn" data-filter="side">🍟 Acompañamientos</button>
+      <button class="filter-btn" data-filter="drink">🥤 Bebidas</button>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+
+      <!-- BURGERS -->
+      <div class="menu-card" data-category="burger">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80" alt="Classic Smash" loading="lazy">
+          <div class="menu-img-overlay"><span class="menu-price-big">6,90€</span></div>
+          <div class="menu-badge">🔥 Más pedida</div>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">Classic Smash</div>
+          <div class="menu-desc">Smash patty, queso americano, cebolla caramelizada, salsa especial LTB</div>
+          <div class="menu-footer">
+            <div class="menu-price">6,90€</div>
+            <button class="add-btn" onclick="openProductModal('classic-smash')">Saber más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="burger">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&q=80" alt="Cheeseburger Doble" loading="lazy">
+          <div class="menu-img-overlay"><span class="menu-price-big">9,50€</span></div>
+          <div class="menu-badge">🔥 Más pedida</div>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">Cheeseburger Doble</div>
+          <div class="menu-desc">Doble smash patty, doble queso, pepinillos, ketchup y mostaza</div>
+          <div class="menu-footer">
+            <div class="menu-price">9,50€</div>
+            <button class="add-btn" onclick="openProductModal('cheeseburger-doble')">Saber más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="burger">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1586816001966-79b736744398?w=600&q=80" alt="Patty Melt" loading="lazy">
+          <div class="menu-img-overlay"><span class="menu-price-big">8,20€</span></div>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">Patty Melt</div>
+          <div class="menu-desc">En pan de molde tostado, queso fundido, cebolla caramelizada</div>
+          <div class="menu-footer">
+            <div class="menu-price">8,20€</div>
+            <button class="add-btn" onclick="openProductModal('patty-melt')">Saber más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="burger">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=600&q=80" alt="Alitas Fritas" loading="lazy">
+          <div class="menu-img-overlay"><span class="menu-price-big">8,50€</span></div>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">Alitas Fritas</div>
+          <div class="menu-desc">Alitas de pollo rebozadas, fritas al momento, crujientes y con salsa para mojar</div>
+          <div class="menu-footer">
+            <div class="menu-price">8,50€</div>
+            <button class="add-btn" onclick="openProductModal('campero-ltb')">Saber más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="burger">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80" alt="BBQ Bacon" loading="lazy">
+          <div class="menu-img-overlay"><span class="menu-price-big">10,50€</span></div>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">BBQ Bacon</div>
+          <div class="menu-desc">Doble patty, bacon crujiente, cheddar, salsa BBQ ahumada</div>
+          <div class="menu-footer">
+            <div class="menu-price">10,50€</div>
+            <button class="add-btn" onclick="openProductModal('bbq-bacon')">Saber más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACOMPAÑAMIENTOS -->
+      <div class="menu-card" data-category="side">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80" alt="Smash Fries" loading="lazy">
+          <div class="menu-img-overlay"><span class="menu-price-big">4,90€</span></div>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">Patatas Smash Fries</div>
+          <div class="menu-desc">Patatas fritas con queso fundido y jalapeños</div>
+          <div class="menu-footer">
+            <div class="menu-price">4,90€</div>
+            <button class="add-btn" onclick="openProductModal('smash-fries')">Saber más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- BEBIDAS -->
+      <div class="menu-card" data-category="drink">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=600&q=80" alt="Limonada Artesanal" loading="lazy">
+          <div class="menu-img-overlay"><span class="menu-price-big">3,50€</span></div>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">Limonada Artesanal</div>
+          <div class="menu-desc">Limonada natural con hierbabuena y jengibre</div>
+          <div class="menu-footer">
+            <div class="menu-price">3,50€</div>
+            <button class="add-btn" onclick="openProductModal('limonada')">Saber más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-card" data-category="drink">
+        <div class="menu-img-wrap">
+          <img src="https://images.unsplash.com/photo-1527960471264-932f39eb5846?w=600&q=80" alt="Refrescos" loading="lazy">
+          <div class="menu-img-overlay"><span class="menu-price-big">2,00€</span></div>
+        </div>
+        <div class="menu-body">
+          <div class="menu-name">Agua / Refrescos</div>
+          <div class="menu-desc">Agua, Coca-Cola, Fanta, Nestea</div>
+          <div class="menu-footer">
+            <div class="menu-price">2,00€</div>
+            <button class="add-btn" onclick="openProductModal('refrescos')">Saber más <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /menu-grid -->
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  NOSOTROS                                      -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="nosotros">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap anim-left">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Nuestra cocina" loading="lazy">
+        <div class="about-img-deco"></div>
+      </div>
+      <div class="about-text anim-right">
+        <h2 class="section-title" style="margin-bottom:12px">Pasión por la<br><span class="gradient-text">Burger Perfecta</span></h2>
+        <div class="section-line" style="margin-bottom:28px">🔥</div>
+        <p class="about-p">Nacimos con una obsesión: la smash burger perfecta. Cada patty se aplasta a mano sobre la plancha a 250°, creando esa costra crujiente que lo cambia todo. Ingredientes locales, recetas propias, amor por lo artesanal.</p>
+        <div class="about-icons">
+          <div class="about-icon-item"><span class="icon">🥩</span><p>Carne 100% vacuno nacional</p></div>
+          <div class="about-icon-item"><span class="icon">🌿</span><p>Ingredientes frescos diarios</p></div>
+          <div class="about-icon-item"><span class="icon">👨‍🍳</span><p>Recetas propias</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  RESERVAR                                      -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="reservar">
+  <div class="container">
+    <h2 class="section-title gradient-text anim-up">Reserva tu Mesa</h2>
+    <div class="section-line anim-up" style="transition-delay:0.1s">📅</div>
+    <div class="reservar-wrap">
+      <div class="glass form-card anim-up" style="transition-delay:0.2s">
+
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0">
+            <label for="bookDate">Fecha</label>
+            <input type="date" id="bookDate" class="form-input" />
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label for="bookName">Tu nombre</label>
+            <input type="text" id="bookName" class="form-input" placeholder="ej. Carlos García" />
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:24px">
+          <label for="bookPhone">Teléfono</label>
+          <input type="tel" id="bookPhone" class="form-input" placeholder="ej. 612 345 678" />
+        </div>
+
+        <span class="chips-label">Hora</span>
+        <div class="chips" id="timeChips">
+          <div class="chip" data-value="12:30">12:30</div>
+          <div class="chip" data-value="13:00">13:00</div>
+          <div class="chip" data-value="13:30">13:30</div>
+          <div class="chip" data-value="14:00">14:00</div>
+          <div class="chip" data-value="14:30">14:30</div>
+          <div class="chip" data-value="20:00">20:00</div>
+          <div class="chip" data-value="20:30">20:30</div>
+          <div class="chip" data-value="21:00">21:00</div>
+          <div class="chip" data-value="21:30">21:30</div>
+          <div class="chip" data-value="22:00">22:00</div>
+          <div class="chip" data-value="22:30">22:30</div>
+        </div>
+
+        <span class="chips-label">Personas</span>
+        <div class="chips persons-chips" id="personChips">
+          <div class="chip" data-value="1">1</div>
+          <div class="chip" data-value="2">2</div>
+          <div class="chip" data-value="3">3</div>
+          <div class="chip" data-value="4">4</div>
+          <div class="chip" data-value="5">5</div>
+          <div class="chip" data-value="6">6</div>
+          <div class="chip" data-value="7">7</div>
+          <div class="chip" data-value="8">8</div>
+        </div>
+
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="allergyCheck" />
+          <div class="custom-check">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg>
+          </div>
+          <span>Tengo alguna alergia o petición especial</span>
+        </label>
+
+        <div class="extra-textarea" id="extraTextarea">
+          <div class="form-group">
+            <label for="allergyText">Cuéntanos</label>
+            <textarea id="allergyText" class="form-input" rows="3" placeholder="Alergias, peticiones especiales, celebraciones..."></textarea>
+          </div>
+        </div>
+
+        <button class="wa-btn" id="waBtn" onclick="sendWhatsApp()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          ENVIAR POR WHATSAPP 📱
+        </button>
+
+        <p class="reservar-note">
+          También puedes llamarnos al <strong>999 99 99 99</strong> <em style="color:#555;font-size:0.85em">(demo)</em> · Cerrado los martes
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  GALERÍA                                       -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="galeria">
+  <div class="container">
+    <h2 class="section-title anim-up">Nuestra <span class="gradient-text">Galería</span></h2>
+    <div class="section-line anim-up" style="transition-delay:0.1s">📸</div>
+    <div class="gallery-grid">
+      <div class="gallery-item anim-up" onclick="openLightbox(0)" style="transition-delay:0.05s">
+        <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=500&q=80" alt="Galería 1" loading="lazy">
+        <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+      </div>
+      <div class="gallery-item anim-up" onclick="openLightbox(1)" style="transition-delay:0.10s">
+        <img src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=500&q=80" alt="Galería 2" loading="lazy">
+        <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+      </div>
+      <div class="gallery-item anim-up" onclick="openLightbox(2)" style="transition-delay:0.15s">
+        <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=500&q=80" alt="Galería 3" loading="lazy">
+        <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+      </div>
+      <div class="gallery-item anim-up" onclick="openLightbox(3)" style="transition-delay:0.20s">
+        <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?w=500&q=80" alt="Galería 4" loading="lazy">
+        <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+      </div>
+      <div class="gallery-item anim-up" onclick="openLightbox(4)" style="transition-delay:0.25s">
+        <img src="https://images.unsplash.com/photo-1610440042657-612c34d95e9f?w=500&q=80" alt="Galería 5" loading="lazy">
+        <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+      </div>
+      <div class="gallery-item anim-up" onclick="openLightbox(5)" style="transition-delay:0.30s">
+        <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=500&q=80" alt="Galería 6" loading="lazy">
+        <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose">✕</button>
+  <button class="lb-btn lb-prev" id="lbPrev">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+  <button class="lb-btn lb-next" id="lbNext">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  OPINIONES                                     -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="opiniones">
+  <div class="container">
+    <h2 class="section-title anim-up">Lo que dicen nuestros <span class="gradient-text">clientes</span></h2>
+    <div class="section-line anim-up" style="transition-delay:0.1s">⭐</div>
+    <div class="reviews-global anim-up" style="transition-delay:0.15s">
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p><span>4.8</span> · +500 reseñas en Google</p>
+    </div>
+
+    <div class="carousel-outer" id="carouselOuter">
+      <div class="carousel-track" id="carouselTrack">
+
+        <!-- Página 1: 4 reseñas -->
+        <div class="review-page">
+          <div class="review-page-grid">
+            <div class="review-card">
+              <div class="review-inner">
+                <div class="review-header">
+                  <div class="review-avatar" style="background:#D97706">C</div>
+                  <div class="review-meta"><h4>Carlos M.</h4><div class="review-stars">★★★★★</div></div>
+                  <div class="review-date" style="margin-left:auto">hace 1 semana</div>
+                </div>
+                <p class="review-text">Las mejores smash burgers que he probado. El queso fundido es espectacular.</p>
+              </div>
+            </div>
+            <div class="review-card">
+              <div class="review-inner">
+                <div class="review-header">
+                  <div class="review-avatar" style="background:#059669">L</div>
+                  <div class="review-meta"><h4>Laura G.</h4><div class="review-stars">★★★★★</div></div>
+                  <div class="review-date" style="margin-left:auto">hace 2 semanas</div>
+                </div>
+                <p class="review-text">Espectaculares los camperos y las croquetas caseras. Ambiente muy acogedor.</p>
+              </div>
+            </div>
+            <div class="review-card">
+              <div class="review-inner">
+                <div class="review-header">
+                  <div class="review-avatar" style="background:#0284C7">M</div>
+                  <div class="review-meta"><h4>Miguel R.</h4><div class="review-stars">★★★★★</div></div>
+                  <div class="review-date" style="margin-left:auto">hace 3 semanas</div>
+                </div>
+                <p class="review-text">Relación calidad-precio increíble. El boniato frito con salsa de yogur es adictivo.</p>
+              </div>
+            </div>
+            <div class="review-card">
+              <div class="review-inner">
+                <div class="review-header">
+                  <div class="review-avatar" style="background:#7C3AED">A</div>
+                  <div class="review-meta"><h4>Ana P.</h4><div class="review-stars">★★★★★</div></div>
+                  <div class="review-date" style="margin-left:auto">hace 1 mes</div>
+                </div>
+                <p class="review-text">La BBQ Bacon es de otro mundo. Volveré sin duda.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Página 2: 2 reseñas -->
+        <div class="review-page">
+          <div class="review-page-grid">
+            <div class="review-card">
+              <div class="review-inner">
+                <div class="review-header">
+                  <div class="review-avatar" style="background:#BE185D">J</div>
+                  <div class="review-meta"><h4>Javier S.</h4><div class="review-stars">★★★★★</div></div>
+                  <div class="review-date" style="margin-left:auto">hace 1 mes</div>
+                </div>
+                <p class="review-text">Atención al cliente impecable y la comida llegó rapidísimo.</p>
+              </div>
+            </div>
+            <div class="review-card">
+              <div class="review-inner">
+                <div class="review-header">
+                  <div class="review-avatar" style="background:#0F766E">S</div>
+                  <div class="review-meta"><h4>Sofía L.</h4><div class="review-stars">★★★★★</div></div>
+                  <div class="review-date" style="margin-left:auto">hace 2 meses</div>
+                </div>
+                <p class="review-text">Las smash fries con queso fundido son adictivas. El mejor sitio de Málaga.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /carousel-track -->
+
+      <div class="carousel-controls">
+        <button class="carousel-arrow" id="carouselPrev">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="carousel-dots" id="carouselDots"></div>
+        <button class="carousel-arrow" id="carouselNext">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  FOOTER                                        -->
+<!-- ══════════════════════════════════════════════ -->
+<footer id="contacto">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo">🍔 <span>Demo</span> Burger</a>
+        <p>Las mejores smash burgers artesanales de España. Ingredientes locales, recetas propias y mucho amor por lo bien hecho.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" title="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-link" title="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" class="social-link" title="TikTok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9a8.19 8.19 0 0 0 4.78 1.52V7.07a4.85 4.85 0 0 1-1.01-.38z"/></svg>
+          </a>
+          <a href="https://maps.google.com" target="_blank" class="social-link" title="Google Maps">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <ul>
+          <li>📍 Av. de la Hamburguesa 42, Local 7<br>41099 Ficticia, Sevilla <em style="color:#555;font-size:0.8em">(demo)</em></li>
+          <li><a href="tel:+34999999999">📞 999 99 99 99</a> <em style="color:#555;font-size:0.8em">(demo)</em></li>
+          <li><a href="mailto:hello@demoburguer.com">✉️ hello@demoburguer.com</a> <em style="color:#555;font-size:0.8em">(demo)</em></li>
+          <li style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.07);padding-top:10px;color:#F97316;font-size:0.8rem;font-weight:600">Web creada por:</li>
+          <li><a href="tel:+34635103334">📞 +34 635 10 33 34</a></li>
+          <li><a href="mailto:manuelure.nova@gmail.com">✉️ manuelure.nova@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Horario <span id="openStatus"></span></h4>
+        <ul>
+          <li>Lun · Mié · Jue · Vie<br>12:30–16:00 / 20:00–23:00</li>
+          <li>Sáb · Dom<br>12:30–17:00 / 20:00–23:30</li>
+          <li style="color:#ef4444;font-weight:600">❌ Martes — Cerrado</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 <span>Demo Burger</span> · Todos los derechos reservados · Diseño web <span>Manuel Ureña</span></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ── FLOATING WA ── -->
+<a href="https://wa.me/34635103334" target="_blank" class="wa-float" title="Reserva por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="wa-tooltip">Reserva por WhatsApp</span>
+</a>
+
+<!-- Product Modal -->
+<div class="product-modal-overlay" id="productModalOverlay" onclick="handleModalOverlayClick(event)">
+  <div class="product-modal" id="productModal">
+    <img class="pm-img" id="pmImg" src="" alt="">
+    <div class="pm-badge-wrap" id="pmBadge"></div>
+    <button class="pm-close" onclick="closeProductModal()">✕</button>
+    <div class="pm-body">
+      <div class="pm-header">
+        <div class="pm-name" id="pmName"></div>
+        <div class="pm-price" id="pmPrice"></div>
+      </div>
+      <div class="pm-short-desc" id="pmShortDesc"></div>
+      <div class="pm-section-label">🧅 Ingredientes</div>
+      <div class="pm-ingredients" id="pmIngredients"></div>
+      <div class="pm-section-label" id="pmAllergenLabel">⚠️ Alérgenos</div>
+      <div class="pm-allergens" id="pmAllergens"></div>
+      <button class="pm-confirm-btn" onclick="confirmAdd()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Añadir al pedido
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  JAVASCRIPT                                    -->
+<!-- ══════════════════════════════════════════════ -->
+<script>
+  /* ── NAVBAR ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 80);
+  }, { passive: true });
+
+  /* ── PARALLAX ── */
+  const heroBg = document.getElementById('heroBg');
+  window.addEventListener('scroll', () => {
+    heroBg.style.transform = `translateY(${window.scrollY * 0.35}px)`;
+  }, { passive: true });
+
+  /* ── MOBILE DRAWER ── */
+  const hamburgerBtn  = document.getElementById('hamburgerBtn');
+  const mobileDrawer  = document.getElementById('mobileDrawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+
+  function openDrawer()  {
+    hamburgerBtn.classList.add('open');
+    mobileDrawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    hamburgerBtn.classList.remove('open');
+    mobileDrawer.classList.remove('open');
+    drawerOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  hamburgerBtn.addEventListener('click', () => mobileDrawer.classList.contains('open') ? closeDrawer() : openDrawer());
+  drawerOverlay.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-link').forEach(l => l.addEventListener('click', closeDrawer));
+
+  /* ── INTERSECTION OBSERVER (fade-in) ── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.anim-up, .anim-left, .anim-right').forEach(el => io.observe(el));
+
+  /* ── COUNTER ANIMATION ── */
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target   = parseFloat(el.dataset.target);
+      const suffix   = el.dataset.suffix ?? '';
+      const decimal  = parseInt(el.dataset.decimal ?? '0');
+      const start    = performance.now();
+      const duration = 2000;
+      function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = (decimal > 0 ? (target * ease).toFixed(decimal) : Math.floor(target * ease)) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      counterObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => counterObs.observe(el));
+
+  /* ── MENU IMAGE CLICK → MODAL ── */
+  document.querySelectorAll('.menu-img-wrap').forEach(wrap => {
+    wrap.style.cursor = 'pointer';
+    wrap.addEventListener('click', () => {
+      wrap.closest('.menu-card').querySelector('.add-btn').click();
+    });
+  });
+
+  /* ── MENU FILTER ── */
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const menuCards  = document.querySelectorAll('.menu-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      menuCards.forEach(card => {
+        const match = filter === 'all' || card.dataset.category === filter;
+        if (match) {
+          card.style.display = '';
+          requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; });
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.85)';
+          setTimeout(() => { card.style.display = 'none'; }, 310);
+        }
+      });
+    });
+  });
+  menuCards.forEach(c => { c.style.transition = 'opacity 0.35s, transform 0.35s'; });
+
+  /* ── PRODUCT MODAL DATA ── */
+  const MENU_DATA = {
+    'classic-smash': {
+      name: 'Classic Smash',
+      price: '6,90€',
+      shortDesc: 'Nuestra best-seller. Smash patty aplastada a mano sobre plancha de hierro a 250°, queso americano fundido en cascada y la inconfundible salsa especial LTB.',
+      img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80',
+      badge: '🔥 Más pedida',
+      ingredients: ['Pan brioche tostado', 'Smash patty 150g', 'Queso americano fundido', 'Cebolla caramelizada', 'Lechuga iceberg', 'Tomate fresco', 'Salsa especial LTB'],
+      allergens: ['Gluten', 'Lácteos', 'Huevo']
+    },
+    'cheeseburger-doble': {
+      name: 'Cheeseburger Doble',
+      price: '9,50€',
+      shortDesc: 'Para los que siempre quieren más. Doble patty smash, doble queso, pepinillos crujientes y el dúo clásico de ketchup y mostaza.',
+      img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&q=80',
+      badge: '🔥 Más pedida',
+      ingredients: ['Pan brioche tostado', '2× Smash patty 150g', '2× Queso americano', 'Pepinillos encurtidos', 'Ketchup', 'Mostaza americana', 'Cebolla blanca'],
+      allergens: ['Gluten', 'Lácteos', 'Mostaza']
+    },
+    'patty-melt': {
+      name: 'Patty Melt',
+      price: '8,20€',
+      shortDesc: 'Clásico americano reconvertido. Pan de molde tostado a la plancha, queso doble fundido y cebolla caramelizada a fuego lento.',
+      img: 'https://images.unsplash.com/photo-1586816001966-79b736744398?w=600&q=80',
+      badge: null,
+      ingredients: ['Pan de molde tostado a la plancha', 'Smash patty 180g', 'Queso cheddar', 'Queso americano', 'Cebolla caramelizada', 'Mostaza artesana'],
+      allergens: ['Gluten', 'Lácteos', 'Mostaza']
+    },
+    'campero-ltb': {
+      name: 'Alitas Fritas',
+      price: '8,50€',
+      shortDesc: 'Alitas de pollo marinadas y rebozadas con nuestra mezcla de especias secreta, fritas al momento hasta conseguir ese rebozado dorado y crujiente. Irresistibles.',
+      img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=600&q=80',
+      badge: null,
+      ingredients: ['Alitas de pollo fresco', 'Rebozado especiado casero', 'Ajo y pimentón ahumado', 'Aceite de girasol', 'Salsa BBQ o ranch para mojar'],
+      allergens: ['Gluten', 'Huevo']
+    },
+    'bbq-bacon': {
+      name: 'BBQ Bacon',
+      price: '10,50€',
+      shortDesc: 'La más contundente de la carta. Bacon ibérico crujiente, cheddar madurado y salsa BBQ ahumada elaborada en casa cada día.',
+      img: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80',
+      badge: null,
+      ingredients: ['Pan brioche jumbo', '2× Smash patty 150g', 'Bacon ibérico crujiente', 'Cheddar madurado', 'Cebolla crujiente', 'Salsa BBQ ahumada casera'],
+      allergens: ['Gluten', 'Lácteos']
+    },
+    'smash-fries': {
+      name: 'Patatas Smash Fries',
+      price: '4,90€',
+      shortDesc: 'Patatas fritas doradas bañadas en queso cheddar fundido y jalapeños encurtidos. El acompañamiento perfecto.',
+      img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80',
+      badge: null,
+      ingredients: ['Patatas fritas en aceite de girasol', 'Queso cheddar fundido', 'Jalapeños encurtidos', 'Cebollino fresco'],
+      allergens: ['Lácteos']
+    },
+    'boniato-frito': {
+      name: 'Boniato Frito',
+      price: '4,50€',
+      shortDesc: 'Cortado a mano y frito hasta quedar dorado. La salsa de yogur con miel y limón es el contraste dulce-salado que enamora.',
+      img: 'https://images.unsplash.com/photo-1604152135912-04a022e23696?w=600&q=80',
+      badge: null,
+      ingredients: ['Boniato cortado a mano', 'Especias suaves', 'Salsa yogur griego', 'Miel', 'Limón'],
+      allergens: ['Lácteos']
+    },
+    'croquetas': {
+      name: 'Croquetas Caseras',
+      price: '5,50€',
+      shortDesc: '6 croquetas cremosas de jamón ibérico hechas en casa a diario. Crujientes por fuera, fundentes por dentro. Imposible comer solo una.',
+      img: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=600&q=80',
+      badge: null,
+      ingredients: ['Jamón ibérico', 'Bechamel casera', 'Pan rallado artesanal', '6 unidades por ración'],
+      allergens: ['Gluten', 'Lácteos', 'Huevo']
+    },
+    'limonada': {
+      name: 'Limonada Artesanal',
+      price: '3,50€',
+      shortDesc: 'Exprimida al momento con hierbabuena fresca y un toque de jengibre. Refrescante y 100% natural.',
+      img: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=600&q=80',
+      badge: null,
+      ingredients: ['Limón exprimido al momento', 'Hierbabuena fresca', 'Jengibre', 'Sirope natural', 'Agua con gas (opcional)'],
+      allergens: []
+    },
+    'refrescos': {
+      name: 'Agua / Refrescos',
+      price: '2,00€',
+      shortDesc: 'Disponibles en lata o botellín según existencias del día.',
+      img: 'https://images.unsplash.com/photo-1527960471264-932f39eb5846?w=600&q=80',
+      badge: null,
+      ingredients: ['Agua mineral', 'Coca-Cola', 'Fanta Naranja', 'Nestea'],
+      allergens: []
+    },
+  };
+
+  let _currentModalProduct = null;
+
+  function openProductModal(key) {
+    const p = MENU_DATA[key];
+    if (!p) return;
+    _currentModalProduct = p;
+
+    document.getElementById('pmImg').src = p.img;
+    document.getElementById('pmImg').alt = p.name;
+    document.getElementById('pmName').textContent = p.name;
+    document.getElementById('pmPrice').textContent = p.price;
+    document.getElementById('pmShortDesc').textContent = p.shortDesc;
+
+    const badgeEl = document.getElementById('pmBadge');
+    if (p.badge) {
+      badgeEl.innerHTML = `<span class="menu-badge" style="position:static;display:inline-block">${p.badge}</span>`;
+    } else {
+      badgeEl.innerHTML = '';
+    }
+
+    document.getElementById('pmIngredients').innerHTML =
+      p.ingredients.map(i => `<span class="pm-ingredient">${i}</span>`).join('');
+
+    const allergenLabel = document.getElementById('pmAllergenLabel');
+    const allergenEl    = document.getElementById('pmAllergens');
+    if (p.allergens && p.allergens.length > 0) {
+      allergenLabel.style.display = '';
+      allergenEl.innerHTML = p.allergens.map(a => `<span class="pm-allergen-tag">${a}</span>`).join('');
+    } else {
+      allergenLabel.style.display = 'none';
+      allergenEl.innerHTML = '<span style="font-size:0.82rem;color:var(--text-muted)">Sin alérgenos principales</span>';
+    }
+
+    document.getElementById('productModalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProductModal() {
+    document.getElementById('productModalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleModalOverlayClick(e) {
+    if (e.target === document.getElementById('productModalOverlay')) closeProductModal();
+  }
+
+  function confirmAdd() {
+    if (!_currentModalProduct) return;
+    const name = _currentModalProduct.name;
+    closeProductModal();
+    addToCart(name);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeProductModal();
+  });
+
+  /* ── TOAST ── */
+  function addToCart(name) {
+    const tc = document.getElementById('toastContainer');
+    const t  = document.createElement('div');
+    t.className   = 'toast';
+    t.textContent = `✅ ${name} añadida al pedido`;
+    tc.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('out');
+      setTimeout(() => t.remove(), 350);
+    }, 3000);
+  }
+
+  /* ── LIGHTBOX ── */
+  const galleryUrls = [
+    'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=1200&q=85',
+    'https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=1200&q=85',
+    'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=1200&q=85',
+    'https://images.unsplash.com/photo-1520072959219-c595dc870360?w=1200&q=85',
+    'https://images.unsplash.com/photo-1610440042657-612c34d95e9f?w=1200&q=85',
+    'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=1200&q=85',
+  ];
+  let lbIndex = 0;
+  const lightbox = document.getElementById('lightbox');
+  const lbImg    = document.getElementById('lightboxImg');
+
+  function openLightbox(idx) {
+    lbIndex  = idx;
+    lbImg.src = galleryUrls[idx];
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function lbGo(dir) {
+    lbIndex = (lbIndex + dir + galleryUrls.length) % galleryUrls.length;
+    lbImg.src = galleryUrls[lbIndex];
+  }
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbPrev').addEventListener('click',  () => lbGo(-1));
+  document.getElementById('lbNext').addEventListener('click',  () => lbGo(1));
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowLeft')   lbGo(-1);
+    if (e.key === 'ArrowRight')  lbGo(1);
+  });
+
+  /* ── RESERVATION CHIPS ── */
+  let selectedTime = '', selectedPersons = '';
+
+  document.querySelectorAll('#timeChips .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#timeChips .chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      selectedTime = chip.dataset.value;
+      checkFormReady();
+    });
+  });
+  document.querySelectorAll('#personChips .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#personChips .chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      selectedPersons = chip.dataset.value;
+      checkFormReady();
+    });
+  });
+
+  const allergyCheck   = document.getElementById('allergyCheck');
+  const extraTextarea  = document.getElementById('extraTextarea');
+  allergyCheck.addEventListener('change', () => {
+    extraTextarea.classList.toggle('visible', allergyCheck.checked);
+  });
+
+  const bookDate  = document.getElementById('bookDate');
+  const bookName  = document.getElementById('bookName');
+  const bookPhone = document.getElementById('bookPhone');
+  const waBtn     = document.getElementById('waBtn');
+
+  [bookDate, bookName, bookPhone].forEach(el => el.addEventListener('input', checkFormReady));
+
+  function checkFormReady() {
+    const ready = bookDate.value && bookName.value.trim() && bookPhone.value.trim() && selectedTime && selectedPersons;
+    waBtn.classList.toggle('active', !!ready);
+  }
+
+  function sendWhatsApp() {
+    if (!waBtn.classList.contains('active')) return;
+    const extras = allergyCheck.checked && document.getElementById('allergyText').value.trim()
+      ? `\n📝 Nota: ${document.getElementById('allergyText').value.trim()}` : '';
+    const msg = `Hola Demo Burger! 🍔\n\nQuiero hacer una reserva:\n📅 Fecha: ${bookDate.value}\n🕐 Hora: ${selectedTime}\n👥 Personas: ${selectedPersons}\n👤 Nombre: ${bookName.value.trim()}\n📞 Teléfono: ${bookPhone.value.trim()}${extras}\n\nMuchas gracias!`;
+    window.open(`https://wa.me/34635103334?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  /* ── CAROUSEL ── */
+  const track      = document.getElementById('carouselTrack');
+  const dotsEl     = document.getElementById('carouselDots');
+  let currentSlide = 0;
+  let autoplayTimer;
+
+  function isMobile() { return window.innerWidth <= 700; }
+  function getPageCount() {
+    return isMobile()
+      ? document.querySelectorAll('.review-card').length
+      : document.querySelectorAll('.review-page').length;
+  }
+
+  function buildDots() {
+    const total = getPageCount();
+    dotsEl.innerHTML = '';
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => { stopAutoplay(); goTo(i); startAutoplay(); });
+      dotsEl.appendChild(dot);
+    }
+  }
+
+  function goTo(idx) {
+    const total = getPageCount();
+    currentSlide = ((idx % total) + total) % total;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+  }
+  function startAutoplay() { autoplayTimer = setInterval(() => goTo(currentSlide + 1), 4000); }
+  function stopAutoplay()  { clearInterval(autoplayTimer); }
+
+  buildDots();
+  document.getElementById('carouselPrev').addEventListener('click', () => { stopAutoplay(); goTo(currentSlide - 1); startAutoplay(); });
+  document.getElementById('carouselNext').addEventListener('click', () => { stopAutoplay(); goTo(currentSlide + 1); startAutoplay(); });
+  document.getElementById('carouselOuter').addEventListener('mouseenter', stopAutoplay);
+  document.getElementById('carouselOuter').addEventListener('mouseleave', startAutoplay);
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { currentSlide = 0; buildDots(); goTo(0); }, 200);
+  });
+
+  startAutoplay();
+
+  /* ── OPEN/CLOSED STATUS ── */
+  (function updateOpenStatus() {
+    const now = new Date();
+    const day = now.getDay(); // 0=Dom, 2=Mar, 6=Sab
+    const t   = now.getHours() * 60 + now.getMinutes();
+    let isOpen = false;
+    if (day !== 2) {
+      const lunchEnd   = 16 * 60;
+      const dinnerEnd  = (day === 0 || day === 6) ? 23 * 60 + 30 : 23 * 60;
+      isOpen = (t >= 12 * 60 + 30 && t < lunchEnd) || (t >= 20 * 60 && t < dinnerEnd);
+    }
+    const badge = document.getElementById('openStatus');
+    badge.innerHTML = `<span class="open-badge ${isOpen ? 'open-now' : 'closed-now'}">${isOpen ? 'Abierto ahora' : 'Cerrado ahora'}</span>`;
+  })();
+</script>
+</body>
+</html>
